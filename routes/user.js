@@ -1,6 +1,5 @@
 var express = require('express');
 var bcrypt = require('bcrypt');
-var jwt = require('jsonwebtoken');
 
 var mdAuthentication = require('../middlewares/authentication');
 
@@ -14,7 +13,12 @@ var User = require('../models/user');
 
 app.get('/', (req, res, next) => {
 
+    var since = req.query.since || 0;
+    since = Number(since);
+
     User.find({}, 'name email img role')
+        .skip(since)
+        .limit(5)
         .exec(
             (err, users) => {
 
@@ -26,9 +30,13 @@ app.get('/', (req, res, next) => {
                     });
                 }
 
-                res.status(200).json({
-                    ok: true,
-                    users: users,
+                User.count({}, (err, count)=> {
+                    
+                    res.status(200).json({
+                        ok: true,
+                        users: users,
+                        total: count
+                });
                 });
 
             });

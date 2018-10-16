@@ -7,6 +7,21 @@ var app = express();
 
 var User = require('../models/user');
 
+
+// =======================================
+//  Google Authentication
+// =======================================
+
+app.post('/google', (req, res) => {
+
+    res.status(200).json({
+        ok: true,
+        message: 'OK!!'
+    });
+
+});
+
+
 app.post('/', (req, res) => {
 
     var body = req.body;
